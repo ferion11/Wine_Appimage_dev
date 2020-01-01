@@ -1,0 +1,65 @@
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "${0}")")"
+
+# If not extract and overwrite, $HERE/lib is a link to $HERE/usr/lib, that link to $HERE/usr/lib64
+export LD_LIBRARY_PATH="$HERE/usr/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/usr/lib32":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$HERE/lib":$LD_LIBRARY_PATH
+
+
+#Sound Library
+export LD_LIBRARY_PATH="$HERE/usr/lib32/alsa-lib":$LD_LIBRARY_PATH
+
+# libGL drivers
+export LIBGL_DRIVERS_PATH="$HERE/usr/lib32/dri":$LIBGL_DRIVERS_PATH
+
+#Font Config
+export FONTCONFIG_PATH="$HERE/etc/fonts":$FONTCONFIG_PATH
+
+#LD
+export WINELDLIBRARY="$HERE/usr/lib32/ld-linux.so.2"
+
+##Wine env
+#export WINEDEBUG=fixme-all
+
+# arch and bottle
+export WINEARCH=win32
+export WINEPREFIX=~/.wine32
+
+# Load winecfg if no arguments given
+APPLICATION=""
+if [ -z "$*" ] ; then
+  APPLICATION="winecfg"
+fi
+
+# Allow the AppImage to be symlinked to e.g., /usr/bin/wineserver
+if [ ! -z $APPIMAGE ] ; then
+  BINARY_NAME=$(basename "$ARGV0")
+else
+  BINARY_NAME=$(basename "$0")
+fi
+
+# change some scripts to executables
+if [[ $1 =~ ^(winecfg|wineboot|regedit|regsvr32|msiexec|msidb|notepad|winefile|winemine)$ ]]; then
+  args=( "$@" )
+  args[0]="$1.exe"
+  set "${args[@]}"
+fi
+
+if [ ! -z "$1" ] && [ -e "$HERE/bin/$1" ] ; then
+  MAIN="$HERE/bin/$1" ; shift
+elif [ ! -z "$1" ] && [ -e "$HERE/usr/bin/$1" ] ; then
+  MAIN="$HERE/usr/bin/$1" ; shift
+elif [ -e "$HERE/bin/$BINARY_NAME" ] ; then
+  MAIN="$HERE/bin/$BINARY_NAME"
+elif [ -e "$HERE/usr/bin/$BINARY_NAME" ] ; then
+  MAIN="$HERE/usr/bin/$BINARY_NAME"
+else
+  MAIN="$HERE/bin/wine"
+fi
+
+if [ -z "$APPLICATION" ] ; then
+  LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$MAIN" "$@" | cat
+else
+  LD_PRELOAD="$HERE/bin/libhookexecv.so" "$WINELDLIBRARY" "$MAIN" "$APPLICATION" | cat
+fi
