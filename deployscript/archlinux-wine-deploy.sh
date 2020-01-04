@@ -38,7 +38,10 @@ pacman -Syw --noconfirm --cachedir cache lib32-alsa-lib lib32-alsa-plugins lib32
 #*don't have package (using the archlinux32 packages below): lib32-ffmpeg lib32-gst-libav
 
 # Remove non lib32 pkgs before extracting
-find ./cache -type f ! -name "lib32*" -exec rm {} \;
+echo "All files in ./cache: $(ls ./cache)"
+#find ./cache -type f ! -name "lib32*" -exec rm {} \;
+find ./cache -type f -name "*x86_64*" -exec rm {} \; -exec echo "Removing: {}" \;
+echo "All files in ./cache: $(ls ./cache)"
 
 # Add the archlinux32 pentium4 packages (lib32-ffmpeg lib32-gst-libav and deps):
 wget -c http://pool.mirror.archlinux32.org/pentium4/extra/gst-libav-1.16.2-1.0-pentium4.pkg.tar.xz -P ./cache/
