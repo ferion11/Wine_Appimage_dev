@@ -14,10 +14,8 @@ wget -nv -c https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x8
 mkdir wineversion
 tar xf PlayOnLinux-wine-* -C wineversion/
 
-#wget -nv -c https://github.com/Hackerl/Wine_Appimage/releases/download/v0.9/libhookexecv.so
-wget -nv -c https://github.com/ferion11/Wine_Appimage/releases/download/v0.9/libhookexecv.so
-#wget -nv -c https://github.com/Hackerl/Wine_Appimage/releases/download/v0.9/wine-preloader_hook
-wget -nv -c https://github.com/ferion11/Wine_Appimage/releases/download/v0.9/wine-preloader_hook
+wget -nv -c https://github.com/ferion11/libsutil/releases/download/wine_hook_v0.9/libhookexecv.so
+wget -nv -c https://github.com/ferion11/libsutil/releases/download/wine_hook_v0.9/wine-preloader_hook
 mv libhookexecv.so src/
 mv wine-preloader_hook src/
 # compile & strip libhookexecv wine-preloader_hook
