@@ -61,9 +61,9 @@ wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libsoxr-0.1.3-1.1-
 wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libssh-0.9.3-1.0-pentium4.pkg.tar.xz -P ./cache/
 wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/vid.stab-1.1-2.4-pentium4.pkg.tar.xz -P ./cache/
 wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/l-smash-2.14.5-1.4-pentium4.pkg.tar.xz -P ./cache/
-wget  -nv-c http://pool.mirror.archlinux32.org/pentium4/staging/x264-3:0.157.r2980.34c06d1-2.2-pentium4.pkg.tar.xz -P ./cache/
-wget  -nv-c http://pool.mirror.archlinux32.org/pentium4/extra/x265-3.2.1-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget  -nv-c http://pool.mirror.archlinux32.org/pentium4/extra/xvidcore-1.3.6-1.0-pentium4.pkg.tar.xz -P ./cache/
+wget -nv -c http://pool.mirror.archlinux32.org/pentium4/staging/x264-3:0.157.r2980.34c06d1-2.2-pentium4.pkg.tar.xz -P ./cache/
+wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/x265-3.2.1-1.0-pentium4.pkg.tar.xz -P ./cache/
+wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/xvidcore-1.3.6-1.0-pentium4.pkg.tar.xz -P ./cache/
 wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/opencore-amr-0.1.5-3.0-pentium4.pkg.tar.xz -P ./cache/
 wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/openjpeg2-2.3.1-1.0-pentium4.pkg.tar.xz -P ./cache/
 
