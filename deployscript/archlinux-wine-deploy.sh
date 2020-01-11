@@ -1,14 +1,40 @@
 #!/bin/bash
+WINE_WORKDIR="wineversion"
+
+#=========================
 die() { echo >&2 "$*"; exit 1; };
 
-WINE_WORKDIR="wineversion"
+ get_archlinux32_pkg() {
+	#WARNING: Only work on well formatted html
+	#usage:  get_archlinux32_pkg [link] [dest]
+	REAL_LINK=""
+	PAR_PKG_LINK=$(echo $1 | grep "pkg.tar")
+	
+	if [ -n "$PAR_PKG_LINK" ]; then
+		REAL_LINK="$PAR_PKG_LINK"
+	else
+		rm -rf tmp_file_html
+		wget -nv -c $1 -O tmp_file_html
+		REAL_LINK=$(sed -n 's/.*href="\([^"]*\).*/\1/p' tmp_file_html | grep "pkg.tar")
+		rm -rf tmp_file_html
+		
+		if [ -z "$REAL_LINK" ]; then
+			echo "* ERROR: Fail to download: $1"
+			return 1;
+		fi
+	fi
+	
+	wget -nv -c $REAL_LINK -P $2
+}
+#=========================
+
 
 # Enable Multilib
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 
 pacman -Syy
-#pacman -S --noconfirm wget file pacman-contrib tar grep gcc lib32-gcc-libs
-pacman -S --noconfirm wget file pacman-contrib tar grep zstd xz
+#Add "gcc lib32-gcc-libs" for compile in the list:
+pacman -S --noconfirm wget file pacman-contrib tar grep sed zstd xz
 
 #===========================================================================================
 # Get Wine
@@ -48,39 +74,39 @@ find ./cache -type f ! -name "lib32*" -exec rm {} \; -exec echo "Removing: {}" \
 echo "All files in ./cache: $(ls ./cache)"
 
 # Add the archlinux32 pentium4 packages (lib32-ffmpeg lib32-gst-libav and deps):
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/gst-libav-1.16.2-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/staging/ffmpeg-1:4.2.1-4.5-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/aom-1.0.0.errata1-1.2-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/gsm-1.0.18-1.4-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/lame-3.100-2.1-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/staging/libass-0.14.0-1.10-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/staging/libbluray-1.1.2-1.7-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/dav1d-0.5.2-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libomxil-bellagio-0.9.3-2.4-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libsoxr-0.1.3-1.1-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libssh-0.9.3-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/vid.stab-1.1-2.4-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/l-smash-2.14.5-1.4-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/staging/x264-3:0.157.r2980.34c06d1-2.2-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/x265-3.2.1-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/xvidcore-1.3.6-1.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/opencore-amr-0.1.5-3.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/openjpeg2-2.3.1-1.0-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/gst-libav-1.16.2-1.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/staging/ffmpeg-1:4.2.1-4.5-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/aom-1.0.0.errata1-1.2-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/gsm-1.0.18-1.4-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/lame-3.100-2.1-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/staging/libass-0.14.0-1.10-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/staging/libbluray-1.1.2-1.7-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/dav1d-0.5.2-1.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/libomxil-bellagio-0.9.3-2.4-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/libsoxr-0.1.3-1.1-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/libssh-0.9.3-1.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/vid.stab-1.1-2.4-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/l-smash-2.14.5-1.4-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/staging/x264-3:0.157.r2980.34c06d1-2.2-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/x265-3.2.1-1.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg https://www.archlinux32.org/packages/pentium4/extra/xvidcore/ ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/opencore-amr-0.1.5-3.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/openjpeg2-2.3.1-1.0-pentium4.pkg.tar.xz ./cache/
 
 # Add the archlinux32 pentium4 packages (smbclient and deps):
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libwbclient-4.10.10-2.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/core/libtirpc-1.2.5-1.0-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/libwbclient-4.10.10-2.0-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/core/libtirpc-1.2.5-1.0-pentium4.pkg.tar.xz ./cache/
 # FIXME: tevent have incomplete python deps
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/tevent-1:0.9.39-4.1-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/tevent-1:0.9.39-4.1-pentium4.pkg.tar.xz ./cache/
 # FIXME: talloc have incomplete python deps
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/talloc-2.3.1-1.0-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/talloc-2.3.1-1.0-pentium4.pkg.tar.xz ./cache/
 # FIXME: ldb incomplete deps
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/ldb-1:1.5.6-2.1-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/libbsd-0.10.0-1.0-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/ldb-1:1.5.6-2.1-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/libbsd-0.10.0-1.0-pentium4.pkg.tar.xz ./cache/
 # FIXME: avahi incomplete deps
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/avahi-0.7+18+g1b5f401-3.1-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/testing/libarchive-3.4.0-3.0-pentium4.pkg.tar.xz -P ./cache/
-wget -nv -c http://pool.mirror.archlinux32.org/pentium4/extra/smbclient-4.10.10-2.0-pentium4.pkg.tar.xz -P ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/avahi-0.7+18+g1b5f401-3.1-pentium4.pkg.tar.xz ./cache/
+ get_archlinux32_pkg https://www.archlinux32.org/packages/pentium4/core/libarchive/ ./cache/
+ get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/smbclient-4.10.10-2.0-pentium4.pkg.tar.xz ./cache/
 
 # FIXME: "wine --check-libs" have:
 #libcapi20.so.3: missing (from isdn4k-utils)
