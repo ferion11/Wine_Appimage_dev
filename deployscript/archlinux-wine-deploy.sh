@@ -81,6 +81,7 @@ pacman -Syy && pacman -S archlinuxcn-keyring
 
 # https://lonewolf.pedrohlc.com/chaotic-aur/
 echo "[chaotic-aur]" >> /etc/pacman.conf
+echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
 echo "Server = http://lonewolf-builder.duckdns.org/\$repo/x86_64" >> /etc/pacman.conf
 echo "Server = http://chaotic.bangl.de/\$repo/x86_64" >> /etc/pacman.conf
 echo "Server = https://repo.kitsuna.net/x86_64" >> /etc/pacman.conf
