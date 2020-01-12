@@ -64,7 +64,8 @@ get_archlinux32_pkgs() {
 	rm -rf tmp_pentium4_extra_html
 }
 #=========================
-
+#Initializing the keyring requires entropy
+pacman-key --init
 
 # Enable Multilib
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
@@ -86,6 +87,7 @@ echo "Server = https://repo.kitsuna.net/x86_64" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
 pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
 pacman-key --lsign-key 3056513887B78AEB
+pacman -Syy && pacman -S archlinuxcn-keyring
 
 pacman -Syy
 #Add "gcc lib32-gcc-libs" for compile in the list:
