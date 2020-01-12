@@ -75,9 +75,9 @@ echo "" >> /etc/pacman.conf
 
 # https://github.com/archlinuxcn/repo
 echo "[archlinuxcn]" >> /etc/pacman.conf
+echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
 echo "Server = https://repo.archlinuxcn.org/\$arch" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
-pacman -Syy && pacman -S archlinuxcn-keyring
 
 # https://lonewolf.pedrohlc.com/chaotic-aur/
 echo "[chaotic-aur]" >> /etc/pacman.conf
@@ -86,8 +86,9 @@ echo "Server = http://lonewolf-builder.duckdns.org/\$repo/x86_64" >> /etc/pacman
 echo "Server = http://chaotic.bangl.de/\$repo/x86_64" >> /etc/pacman.conf
 echo "Server = https://repo.kitsuna.net/x86_64" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
-pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
-pacman-key --lsign-key 3056513887B78AEB
+#pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
+#pacman-key --lsign-key 3056513887B78AEB
+
 pacman -Syy && pacman -S archlinuxcn-keyring
 
 pacman -Syy
