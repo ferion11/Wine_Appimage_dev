@@ -64,6 +64,7 @@ get_archlinux32_pkgs() {
 	rm -rf tmp_pentium4_extra_html
 }
 #=========================
+
 #Initializing the keyring requires entropy
 pacman-key --init
 
@@ -94,8 +95,8 @@ pacman -Syy && pacman -S archlinuxcn-keyring
 pacman -Syy
 #Add "gcc lib32-gcc-libs" for compile in the list:
 pacman -S --noconfirm wget file pacman-contrib tar grep sed zstd xz
-
 #===========================================================================================
+
 # Get Wine
 #wget -nv -c https://www.playonlinux.com/wine/binaries/phoenicis/upstream-linux-x86/PlayOnLinux-wine-4.10-upstream-linux-x86.tar.gz
 #wget -nv -c https://www.playonlinux.com/wine/binaries/phoenicis/upstream-linux-x86/PlayOnLinux-wine-4.21-upstream-linux-x86.tar.gz
@@ -112,8 +113,8 @@ mv wine-preloader_hook src/
 #gcc -std=c99 -m32 -static src/preloaderhook.c -o src/wine-preloader_hook
 #strip src/libhookexecv.so src/wine-preloader_hook
 chmod +x src/wine-preloader_hook
-
 #===========================================================================================
+
 cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 
 # Add a dependency library, such as freetype font library
@@ -160,6 +161,7 @@ rm -rf cache; rm -rf include; rm usr/lib32/{*.a,*.o}; rm -rf usr/lib32/pkgconfig
 rm -rf boot; rm -rf dev; rm -rf home; rm -rf mnt; rm -rf opt; rm -rf proc; rm -rf root; rm sbin; rm -rf srv; rm -rf sys; rm -rf tmp; rm -rf var
 rm -rf usr/src; rm -rf usr/share; rm usr/sbin; rm -rf usr/local; rm usr/lib/{*.a,*.o}
 #===========================================================================================
+
 # fix broken link libglx_indirect and others
 rm usr/lib32/libGLX_indirect.so.0
 ln -s libGLX_mesa.so.0 libGLX_indirect.so.0
@@ -189,7 +191,12 @@ ln -s libva-x11.so libva-x11.so.1
 mv -n libva.so.1 usr/lib32
 mv -n libva-drm.so.1 usr/lib32
 mv -n libva-x11.so.1 usr/lib32
+
+# gst-libav link
+ln -s ../../lib/gstreamer-1.0/libgstlibav.so libgstlibav.so
+mv libgstlibav.so usr/lib32/gstreamer-1.0/
 #===========================================================================================
+
 # Disable PulseAudio
 rm etc/asound.conf; rm -rf etc/modprobe.d/alsa.conf; rm -rf etc/pulse
 
@@ -200,6 +207,7 @@ sed -i 's/winemenubuilder.exe -a -r/winemenubuilder.exe -r/g' share/wine/wine.in
 sed -i 's|    LicenseInformation|    LicenseInformation,\\\n    FileOpenAssociations|g;$a \\n[FileOpenAssociations]\nHKCU,Software\\Wine\\FileOpenAssociations,"Enable",,"N"' share/wine/wine.inf
 
 #===========================================================================================
+
 # appimage
 cd ..
 
