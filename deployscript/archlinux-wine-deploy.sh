@@ -141,6 +141,7 @@ echo "All files in ./cache: $(ls ./cache)"
 # FIXME: avahi incomplete deps
 #ORIGINAL: get_archlinux32_pkgs ./cache/ gst-libav ffmpeg aom gsm lame libass libbluray dav1d libomxil-bellagio libsoxr libssh vid.stab l-smash x264 x265 xvidcore opencore-amr openjpeg2 libwbclient libtirpc tevent talloc ldb libbsd avahi libarchive smbclient
 # Can't get from arch64_lib32_plus_user_repo: lib32-ffmpeg lib32-gst-libav lib32-libwbclient lib32-tevent lib32-talloc lib32-ldb lib32-libbsd lib32-avahi lib32-libarchive lib32-smbclient
+# TODO: remover smbclient e colocar odbc no lugar
 get_archlinux32_pkgs ./cache/ ffmpeg gst-libav libwbclient tevent talloc ldb libbsd avahi libarchive smbclient libsoxr libssh vid.stab l-smash libtirpc
 
 # FIXME: "wine --check-libs" have:
