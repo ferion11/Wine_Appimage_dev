@@ -263,7 +263,14 @@ rm src/{libhookexecv.so,wine-preloader_hook}
 
 cp AppRun $WINE_WORKDIR
 cp resource/* $WINE_WORKDIR
+#-----------------------------
+
+#test for others AppImage variations:
+cp -rp $WINE_WORKDIR test2
+mkdir test2/mark_test2
+#-----------------------------
 
 ./appimagetool.AppImage --appimage-extract
 
 export ARCH=x86_64; squashfs-root/AppRun -v $WINE_WORKDIR -u 'gh-releases-zsync|ferion11|Wine_Appimage|continuous|wine-i386*arch*.AppImage.zsync' wine-i386_${ARCH}-archlinux.AppImage
+export ARCH=x86_64; squashfs-root/AppRun -v test2 -u 'gh-releases-zsync|ferion11|Wine_Appimage|continuous|wine-test2-i386*arch*.AppImage.zsync' wine-test2-i386_${ARCH}-archlinux.AppImage
