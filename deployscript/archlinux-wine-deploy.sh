@@ -142,7 +142,7 @@ rm -rf "$PKG_WORKDIR"
 #-----------------------------------
 
 # Get Wine
-wget -nv -c https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.1-staging-linux-x86.tar.gz
+wget -nv -c https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-4.21-staging-linux-x86.tar.gz
 tar xf PlayOnLinux-wine-* -C "$WINE_WORKDIR"/
 
 wget -nv -c https://github.com/ferion11/libsutil/releases/download/wine_hook_v0.9/libhookexecv.so
