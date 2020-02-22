@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ferion11/Wine_Appimage_dev.svg?branch=master)](https://travis-ci.org/ferion11/Wine_Appimage_dev)
 # Wine_Appimage_dev
 Just for test new dev version of Wine_Appimage (don't use it, unless you know what you are doing)
 

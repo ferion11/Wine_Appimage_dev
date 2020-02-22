@@ -17,7 +17,9 @@ after_success:
 
   # archlinux
   - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wine-appimage.archlinux cp result.tar /tmp
-  - tar xf /tmp/result.tar -C /tmp/apps
+  
+  # extract result
+  - tar xvf ./result.tar -C ./apps
 
   # md5sum tool
   - wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh

@@ -288,5 +288,8 @@ cp resource/* $WINE_WORKDIR
 export ARCH=x86_64; squashfs-root/AppRun -v $WINE_WORKDIR -u 'gh-releases-zsync|ferion11|Wine_Appimage|continuous|wine-i386*arch*.AppImage.zsync' wine-i386_${ARCH}-archlinux.AppImage
 
 echo "Packing tar result file..."
+echo "1. All files in ./: $(ls ./)"
 rm -rf appimagetool.AppImage
-tar cf result.tar *.AppImage *.zsync
+echo "2. All files in ./: $(ls ./)"
+tar cvf result.tar *.AppImage *.zsync
+echo "3. All files in ./: $(ls ./)"
