@@ -136,9 +136,6 @@ mkdir "$WINE_WORKDIR"
 mkdir "$PKG_WORKDIR"
 
 #----------- AUR ----------------
-# lib32-talloc HAVE_SECURE_MKSTEMP workaround:
-chmod 777 /tmp
-
 #Delete a nobody's password (make it empty):
 passwd -d nobody
 
@@ -148,6 +145,17 @@ printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 # change workind dir to nobody own:
 chown nobody.nobody "$PKG_WORKDIR"
 #------------
+
+# HAVE_SECURE_MKSTEMP workaround part1:
+chmod 777 /tmp
+sudo -u nobody mkdir -p /tmp/nobody_tmp
+TMPDIR_OLD=$TMPDIR
+TMP_OLD=$TMP
+TEMP_OLD=$TEMP
+TMPDIR=$(sudo -u nobody mktemp -d /tmp/nobody_tmp/XXXX)
+TMP=$TMPDIR
+TEMP=$TMPDIR
+export TMPDIR TMP TEMP
 
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
@@ -233,6 +241,12 @@ echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-gst-libav package"
 cd ..
 #------------
+
+# HAVE_SECURE_MKSTEMP workaround part2:
+TMPDIR=$TMPDIR_OLD
+TMP=$TMP_OLD
+TEMP=$TEMP_OLD
+export TMPDIR TMP TEMP
 
 mv *.pkg.tar* ../"$WINE_WORKDIR" || die "ERROR: None package builded from AUR"
 
