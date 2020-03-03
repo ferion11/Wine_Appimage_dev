@@ -148,7 +148,7 @@ printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 # change workind dir to nobody own:
 chown nobody.nobody "$PKG_WORKDIR"
 
-#alias makepkg="sudo -u nobody makepkg"
+alias makepkg="sudo -u nobody makepkg"
 #------------
 
 ## HAVE_SECURE_MKSTEMP workaround:
@@ -162,7 +162,7 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
 git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
-sudo makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
