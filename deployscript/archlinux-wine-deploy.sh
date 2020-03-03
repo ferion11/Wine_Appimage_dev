@@ -170,6 +170,7 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
 sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
+sed -i '/sha256sums=/c sha256sums=("ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77")' ./PKGBUILD
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
@@ -181,6 +182,7 @@ cd ..
 git clone https://aur.archlinux.org/lib32-tevent.git
 cd lib32-tevent
 sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
+sed -i '/sha256sums=/c sha256sums=("f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696")' ./PKGBUILD
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
