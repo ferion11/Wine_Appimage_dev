@@ -168,8 +168,7 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 # getting some pkg now from https://gitlab.com/manjariando/manjariando-deps-x86_64/-/tree/master/public
 
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
-#git clone https://aur.archlinux.org/lib32-talloc.git
-mkdir lib32-talloc
+git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
 #makepkg --syncdeps --noconfirm
 wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-talloc-2.3.1-1-x86_64.pkg.tar.zst || die "URL lib32-talloc erro!"
@@ -180,8 +179,7 @@ cd ..
 #------------
 
 ## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
-#git clone https://aur.archlinux.org/lib32-tevent.git
-mkdir lib32-tevent
+git clone https://aur.archlinux.org/lib32-tevent.git
 cd lib32-tevent
 #sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
 #sed -i '/sha256sums=/c sha256sums=("f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696")' ./PKGBUILD
@@ -196,7 +194,8 @@ cd ..
 ## lib32-libbsd https://aur.archlinux.org/packages/lib32-libbsd/
 git clone https://aur.archlinux.org/lib32-libbsd.git
 cd lib32-libbsd
-makepkg --syncdeps --noconfirm
+#makepkg --syncdeps --noconfirm
+wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-libbsd-0.10.0-2-x86_64.pkg.tar.zst || die "URL lib32-libbsd erro!"
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libbsd package"
