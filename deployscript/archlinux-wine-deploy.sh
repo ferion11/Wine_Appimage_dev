@@ -147,10 +147,12 @@ printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 
 # change workind dir to nobody own:
 chown nobody.nobody "$PKG_WORKDIR"
+
+#alias makepkg="sudo -u nobody makepkg"
 #------------
 
-# HAVE_SECURE_MKSTEMP workaround:
-chmod 777 /tmp
+## HAVE_SECURE_MKSTEMP workaround:
+#chmod 777 /tmp
 
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
@@ -158,9 +160,9 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------
 
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-talloc.git
+git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
-sudo -u nobody makepkg --syncdeps --noconfirm
+sudo makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
@@ -168,9 +170,9 @@ cd ..
 #------------
 
 ## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-tevent.git
+git clone https://aur.archlinux.org/lib32-tevent.git
 cd lib32-tevent
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-tevent package"
@@ -178,9 +180,9 @@ cd ..
 #------------
 
 ## lib32-libbsd https://aur.archlinux.org/packages/lib32-libbsd/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-libbsd.git
+git clone https://aur.archlinux.org/lib32-libbsd.git
 cd lib32-libbsd
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libbsd package"
@@ -188,9 +190,9 @@ cd ..
 #------------
 
 ## lib32-ldb https://aur.archlinux.org/packages/lib32-ldb/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-ldb.git
+git clone https://aur.archlinux.org/lib32-ldb.git
 cd lib32-ldb
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-ldb package"
@@ -198,9 +200,9 @@ cd ..
 #------------
 
 ## lib32-lzo https://aur.archlinux.org/packages/lib32-lzo/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-lzo.git
+git clone https://aur.archlinux.org/lib32-lzo.git
 cd lib32-lzo
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-lzo package"
@@ -208,9 +210,9 @@ cd ..
 #------------
 
 ## lib32-libarchive https://aur.archlinux.org/packages/lib32-libarchive/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-libarchive.git
+git clone https://aur.archlinux.org/lib32-libarchive.git
 cd lib32-libarchive
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libarchive package"
@@ -218,9 +220,9 @@ cd ..
 #------------
 
 ## lib32-libwbclient https://aur.archlinux.org/packages/lib32-libwbclient/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-smbclient.git
+git clone https://aur.archlinux.org/lib32-smbclient.git
 cd lib32-smbclient
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-smbclient package"
@@ -228,9 +230,9 @@ cd ..
 #------------
 
 ## lib32-gst-libav https://aur.archlinux.org/packages/lib32-gst-libav/
-sudo -u nobody git clone https://aur.archlinux.org/lib32-gst-libav.git
+git clone https://aur.archlinux.org/lib32-gst-libav.git
 cd lib32-gst-libav
-sudo -u nobody makepkg --syncdeps --noconfirm
+makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-gst-libav package"
