@@ -201,8 +201,6 @@ build() {
      --libdir='/usr/lib32' \\
      --sysconfdir=/etc/samba \\
      --localstatedir=/var \\
-     --bundled-libraries=NONE \\
-     --builtin-libraries=replace \\
      --enable-talloc-compat1 \\
      --disable-python
 
