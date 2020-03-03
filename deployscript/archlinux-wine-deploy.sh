@@ -130,7 +130,7 @@ pacman -Syy
 #Add "base-devel multilib-devel" for compile in the list:
 pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz
 
-# extra for build
+## extra for build
 EXTRASDEP="lib32-popt lib32-tdb lib32-acl lib32-bzip2 lib32-expat lib32-openssl lib32-xz lib32-zlib"
 pacman -S --noconfirm python lib32-ffmpeg tevent talloc libbsd ldb lib32-cmocka lzo libarchive libwbclient $EXTRASDEP
 #===========================================================================================
@@ -165,74 +165,28 @@ sed -i 's/EUID == 0/EUID == 9875/g' /usr/bin/makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 
 #------------
+# getting some pkg now from https://gitlab.com/manjariando/manjariando-deps-x86_64/-/tree/master/public
 
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
 #git clone https://aur.archlinux.org/lib32-talloc.git
 mkdir lib32-talloc
-cat > "./lib32-talloc/PKGBUILD" << EOF
-# Maintainer: Fabian Maurer <dark.shadow4@web.de>
-# Contributor: Rafael Fontenelle <rafaelff@gnome.org>
-# Contributor: Maxime Gauduin <alucryd@archlinux.org>
-# Contributor: Tobias Powalowski <tpowa@archlinux.org>
-
-_name=talloc
-pkgname=lib32-\${_name}
-pkgver=2.3.1
-pkgrel=1
-pkgdesc='A hierarchical pool based memory allocator with destructors'
-arch=('x86_64')
-url='http://talloc.samba.org/'
-license=('GPL3')
-source=("https://samba.org/ftp/\${_name}/\${_name}-\${pkgver}.tar.gz")
-depends=('talloc')
-makedepends=('python')
-sha256sums=('ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77')
-
-build() {
-  cd \${_name}-\${pkgver}
-
-  export CC='gcc -m32'
-  export CXX='g++ -m32'
-  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
-
-  chmod 777 /tmp
-
-  ./configure --prefix=/usr \\
-     --libdir='/usr/lib32' \\
-     --sysconfdir=/etc/samba \\
-     --localstatedir=/var \\
-     --bundled-libraries=NONE \\
-     --builtin-libraries=replace \\
-     --enable-talloc-compat1 \\
-     --disable-python
-
-  make
-}
-
-package() {
-  cd \${_name}-\${pkgver}
-  make DESTDIR="\${pkgdir}" install
-  rm -rf "\${pkgdir}"/usr/{include,share}
-}
-EOF
 cd lib32-talloc
-makepkg --syncdeps --noconfirm
+#makepkg --syncdeps --noconfirm
+wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-talloc-2.3.1-1-x86_64.pkg.tar.zst || die "URL lib32-talloc erro!"
 pacman --noconfirm -U ./*.pkg.tar*
-echo "====================="
-echo "DEBUG: tail -140 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.1/bin/config.log"
-tail -140 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.1/bin/config.log
-echo "====================="
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
 cd ..
 #------------
 
 ## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
-git clone https://aur.archlinux.org/lib32-tevent.git
+#git clone https://aur.archlinux.org/lib32-tevent.git
+mkdir lib32-tevent
 cd lib32-tevent
-sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
-sed -i '/sha256sums=/c sha256sums=("f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696")' ./PKGBUILD
-makepkg --syncdeps --noconfirm
+#sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
+#sed -i '/sha256sums=/c sha256sums=("f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696")' ./PKGBUILD
+#makepkg --syncdeps --noconfirm
+wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-tevent-0.9.39-3-x86_64.pkg.tar.zst || die "URL lib32-tevent erro!"
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-tevent package"
