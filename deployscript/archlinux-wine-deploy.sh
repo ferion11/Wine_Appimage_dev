@@ -155,7 +155,7 @@ sed -i 's/EUID == 0/EUID == 987/g' /usr/bin/makepkg
 #------------
 
 ## HAVE_SECURE_MKSTEMP workaround:
-#chmod 777 /tmp
+chmod 777 /tmp
 
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
