@@ -169,12 +169,9 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
 git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
+sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
-echo "=================="
-echo "DEBUG: tail -70 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log"
-tail -70 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log
-echo "=================="
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
 cd ..
@@ -183,6 +180,7 @@ cd ..
 ## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
 git clone https://aur.archlinux.org/lib32-tevent.git
 cd lib32-tevent
+sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
