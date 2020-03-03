@@ -88,6 +88,20 @@ pacman-key --init
 # Enable Multilib
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 
+# Configure for compilation:
+#sed -i '/^BUILDENV/s/\!ccache/ccache/' /etc/makepkg.conf
+sed -i '/#MAKEFLAGS=/c MAKEFLAGS="-j2"' /etc/makepkg.conf
+#sed -i '/^COMPRESSXZ/s/\xz/xz -T 2/' /etc/makepkg.conf
+#sed -i "s/^PKGEXT='.pkg.tar.gz'/PKGEXT='.pkg.tar.xz'/" /etc/makepkg.conf
+#sed -i '$a   CFLAGS="$CFLAGS -w"'   /etc/makepkg.conf
+#sed -i '$a CXXFLAGS="$CXXFLAGS -w"' /etc/makepkg.conf
+sed -i 's/^CFLAGS\s*=.*/CFLAGS="-mtune=nehalem -O2 -pipe -fno-stack-protector"/' /etc/makepkg.conf
+sed -i 's/^CXXFLAGS\s*=.*/CXXFLAGS="-mtune=nehalem -O2 -pipe -fno-stack-protector"/' /etc/makepkg.conf
+#sed -i 's/^LDFLAGS\s*=.*/LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"/' /etc/makepkg.conf
+sed -i 's/^#PACKAGER\s*=.*/PACKAGER="DanielDevBR"/' /etc/makepkg.conf
+sed -i 's/^PKGEXT\s*=.*/PKGEXT=".pkg.tar"/' /etc/makepkg.conf
+sed -i 's/^SRCEXT\s*=.*/SRCEXT=".src.tar"/' /etc/makepkg.conf
+
 # Add more repo:
 echo "" >> /etc/pacman.conf
 
@@ -130,18 +144,73 @@ chown nobody.nobody "$PKG_WORKDIR"
 
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
+
 #------------
 
-## lib32-isdn4k-utils  https://aur.archlinux.org/packages/lib32-isdn4k-utils
-#sudo -u nobody git clone https://aur.archlinux.org/lib32-isdn4k-utils.git
-#cd lib32-isdn4k-utils
-#sudo -u nobody makepkg --syncdeps --noconfirm
-#echo "* All files HERE: $(ls ./)"
-#mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-isdn4k-utils package"
-#cd ..
+## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-talloc.git
+cd lib32-talloc
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
+cd ..
 #------------
 
-#mv *.pkg.tar* ../"$WINE_WORKDIR" || die "ERROR: None package builded from AUR"
+## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-tevent.git
+cd lib32-tevent
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-tevent package"
+cd ..
+#------------
+
+## lib32-libbsd https://aur.archlinux.org/packages/lib32-libbsd/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-libbsd.git
+cd lib32-libbsd
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libbsd package"
+cd ..
+#------------
+
+## lib32-ldb https://aur.archlinux.org/packages/lib32-ldb/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-ldb.git
+cd lib32-ldb
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-ldb package"
+cd ..
+#------------
+
+## lib32-libarchive https://aur.archlinux.org/packages/lib32-libarchive/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-libarchive.git
+cd lib32-libarchive
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libarchive package"
+cd ..
+#------------
+
+## lib32-libwbclient https://aur.archlinux.org/packages/lib32-libwbclient/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-smbclient.git
+cd lib32-smbclient
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-smbclient package"
+cd ..
+#------------
+
+## lib32-gst-libav https://aur.archlinux.org/packages/lib32-gst-libav/
+sudo -u nobody git clone https://aur.archlinux.org/lib32-gst-libav.git
+cd lib32-gst-libav
+sudo -u nobody makepkg --syncdeps --noconfirm
+echo "* All files HERE: $(ls ./)"
+mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-gst-libav package"
+cd ..
+#------------
+
+mv *.pkg.tar* ../"$WINE_WORKDIR" || die "ERROR: None package builded from AUR"
 
 cd ..
 rm -rf "$PKG_WORKDIR"
@@ -168,10 +237,10 @@ cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 dependencys=$(pactree -s -u wine |grep lib32 | xargs)
 
 mkdir cache
-mv *.pkg.tar* ./cache/ || echo "ERROR: None package builded from AUR"
+mv *.pkg.tar* ./cache/ || die "ERROR: None package builded from AUR"
 
 pacman -Scc --noconfirm
-pacman -Syw --noconfirm --cachedir cache lib32-alsa-lib lib32-alsa-plugins lib32-faudio lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-gnutls lib32-gst-plugins-base lib32-lcms2 lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libldap lib32-libpcap lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-mpg123 lib32-ncurses lib32-openal lib32-sdl2 lib32-v4l-utils lib32-libdrm lib32-libva lib32-krb5 lib32-flac lib32-gst-plugins-good lib32-libcups lib32-libwebp lib32-libvpx lib32-libvpx1.3 lib32-portaudio lib32-sdl lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-sdl_image lib32-sdl_mixer lib32-sdl_ttf lib32-smpeg lib32-speex lib32-speexdsp lib32-twolame lib32-ladspa lib32-libao lib32-libvdpau lib32-libpulse lib32-libcanberra-pulse lib32-libcanberra-gstreamer lib32-glew lib32-mesa-demos lib32-jansson lib32-libxinerama lib32-atk lib32-vulkan-icd-loader lib32-vulkan-intel lib32-vulkan-radeon lib32-vkd3d lib32-aom lib32-gsm lib32-lame lib32-libass lib32-libbluray lib32-dav1d lib32-libomxil-bellagio lib32-x264 lib32-x265 lib32-xvidcore lib32-opencore-amr lib32-openjpeg2 lib32-ncurses5-compat-libs lib32-ffmpeg lib32-gst-libav lib32-libwbclient lib32-tevent lib32-talloc lib32-ldb lib32-libbsd lib32-libarchive lib32-smbclient $dependencys #|| die "ERROR: Some packages not found!!!"
+pacman -Syw --noconfirm --cachedir cache lib32-alsa-lib lib32-alsa-plugins lib32-faudio lib32-fontconfig lib32-freetype2 lib32-gcc-libs lib32-gettext lib32-giflib lib32-glu lib32-gnutls lib32-gst-plugins-base lib32-lcms2 lib32-libjpeg-turbo lib32-libjpeg6-turbo lib32-libldap lib32-libpcap lib32-libpng lib32-libpng12 lib32-libsm lib32-libxcomposite lib32-libxcursor lib32-libxdamage lib32-libxi lib32-libxml2 lib32-libxmu lib32-libxrandr lib32-libxslt lib32-libxxf86vm lib32-mesa lib32-mesa-libgl lib32-mpg123 lib32-ncurses lib32-openal lib32-sdl2 lib32-v4l-utils lib32-libdrm lib32-libva lib32-krb5 lib32-flac lib32-gst-plugins-good lib32-libcups lib32-libwebp lib32-libvpx lib32-libvpx1.3 lib32-portaudio lib32-sdl lib32-sdl2_image lib32-sdl2_mixer lib32-sdl2_ttf lib32-sdl_image lib32-sdl_mixer lib32-sdl_ttf lib32-smpeg lib32-speex lib32-speexdsp lib32-twolame lib32-ladspa lib32-libao lib32-libvdpau lib32-libpulse lib32-libcanberra-pulse lib32-libcanberra-gstreamer lib32-glew lib32-mesa-demos lib32-jansson lib32-libxinerama lib32-atk lib32-vulkan-icd-loader lib32-vulkan-intel lib32-vulkan-radeon lib32-vkd3d lib32-aom lib32-gsm lib32-lame lib32-libass lib32-libbluray lib32-dav1d lib32-libomxil-bellagio lib32-x264 lib32-x265 lib32-xvidcore lib32-opencore-amr lib32-openjpeg2 lib32-ncurses5-compat-libs lib32-ffmpeg $dependencys || die "ERROR: Some packages not found!!!"
 #*don't have package (using the archlinux32 packages below): lib32-ffmpeg lib32-gst-libav (smbclient and deps too)
 # removed for smaller size because wine don't need: lib32-gtk2 lib32-wxgtk2
 
@@ -209,6 +278,9 @@ find ./cache -name '*tar.xz' -exec tar --warning=no-unknown-keyword -xJf {} \;
 # extracting *tar.zst...
 find ./cache -name '*tar.zst' -exec tar --warning=no-unknown-keyword --zstd -xf {} \;
 
+# extracting *tar...
+find ./cache -name '*tar' -exec tar --warning=no-unknown-keyword -xf {} \;
+
 # Install vulkan tools:
 wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcube32
 wget -nv -c https://github.com/ferion11/libsutil/releases/download/vulkan32_tools_v1.0/vkcubepp32
@@ -225,43 +297,43 @@ rm -rf boot; rm -rf dev; rm -rf home; rm -rf mnt; rm -rf opt; rm -rf proc; rm -r
 rm -rf usr/src; rm -rf usr/share; rm usr/sbin; rm -rf usr/local; rm usr/lib/{*.a,*.o}
 #===========================================================================================
 
-# fix broken link libglx_indirect and others
-rm usr/lib32/libGLX_indirect.so.0
-ln -s libGLX_mesa.so.0 libGLX_indirect.so.0
-mv -n libGLX_indirect.so.0 usr/lib32
+## fix broken link libglx_indirect and others
+#rm usr/lib32/libGLX_indirect.so.0
+#ln -s libGLX_mesa.so.0 libGLX_indirect.so.0
+#mv -n libGLX_indirect.so.0 usr/lib32
 
-rm usr/lib/libGLX_indirect.so.0
-ln -s ../lib32/libGLX_mesa.so.0 libGLX_indirect.so.0
-mv -n libGLX_indirect.so.0 usr/lib
+#rm usr/lib/libGLX_indirect.so.0
+#ln -s ../lib32/libGLX_mesa.so.0 libGLX_indirect.so.0
+#mv -n libGLX_indirect.so.0 usr/lib
 #--------
 
-rm usr/lib32/libkeyutils.so
-ln -s libkeyutils.so.1 libkeyutils.so
-mv -n libkeyutils.so usr/lib32
+#rm usr/lib32/libkeyutils.so
+#ln -s libkeyutils.so.1 libkeyutils.so
+#mv -n libkeyutils.so usr/lib32
 
-rm usr/lib/libkeyutils.so
-ln -s ../lib32/libkeyutils.so.1 libkeyutils.so
-mv -n libkeyutils.so usr/lib
+#rm usr/lib/libkeyutils.so
+#ln -s ../lib32/libkeyutils.so.1 libkeyutils.so
+#mv -n libkeyutils.so usr/lib
 #--------
 
 # workaround some of "wine --check-libs" wrong versions
-ln -s libpcap.so libpcap.so.0.8
-mv -n libpcap.so.0.8 usr/lib32
+#ln -s libpcap.so libpcap.so.0.8
+#mv -n libpcap.so.0.8 usr/lib32
 
-ln -s libva.so libva.so.1
-ln -s libva-drm.so libva-drm.so.1
-ln -s libva-x11.so libva-x11.so.1
-mv -n libva.so.1 usr/lib32
-mv -n libva-drm.so.1 usr/lib32
-mv -n libva-x11.so.1 usr/lib32
+#ln -s libva.so libva.so.1
+#ln -s libva-drm.so libva-drm.so.1
+#ln -s libva-x11.so libva-x11.so.1
+#mv -n libva.so.1 usr/lib32
+#mv -n libva-drm.so.1 usr/lib32
+#mv -n libva-x11.so.1 usr/lib32
 
-# gst-libav link
-ln -s ../../lib/gstreamer-1.0/libgstlibav.so libgstlibav.so
-mv libgstlibav.so usr/lib32/gstreamer-1.0/
+## gst-libav link
+#ln -s ../../lib/gstreamer-1.0/libgstlibav.so libgstlibav.so
+#mv libgstlibav.so usr/lib32/gstreamer-1.0/
 
-# temp workaroud to gst-libav load x264. TODO: recompile package and avoid archlinux32 (or use all codecs tree from it)
-ln -s libx264.so libx264.so.157
-mv -n libx264.so.157 usr/lib32
+## temp workaroud to gst-libav load x264. TODO: recompile package and avoid archlinux32 (or use all codecs tree from it)
+#n -s libx264.so libx264.so.157
+#mv -n libx264.so.157 usr/lib32
 #===========================================================================================
 
 # Disable PulseAudio
