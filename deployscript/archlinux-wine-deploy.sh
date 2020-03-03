@@ -167,10 +167,58 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 #------------
 
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
-git clone https://aur.archlinux.org/lib32-talloc.git
+#git clone https://aur.archlinux.org/lib32-talloc.git
+mkdir lib32-talloc
 cd lib32-talloc
-sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
-sed -i '/sha256sums=/c sha256sums=("ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77")' ./PKGBUILD
+#sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
+#sed -i '/sha256sums=/c sha256sums=("ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77")' ./PKGBUILD
+cat > "./pcsx2-git/PKGBUILD" << EOF
+# Maintainer: Fabian Maurer <dark.shadow4@web.de>
+# Contributor: Rafael Fontenelle <rafaelff@gnome.org>
+# Contributor: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Tobias Powalowski <tpowa@archlinux.org>
+
+_name=talloc
+pkgname=lib32-\${_name}
+pkgver=2.3.1
+pkgrel=1
+pkgdesc='A hierarchical pool based memory allocator with destructors'
+arch=('x86_64')
+url='http://talloc.samba.org/'
+license=('GPL3')
+source=("https://samba.org/ftp/\${_name}/\${_name}-\${pkgver}.tar.gz")
+depends=('talloc')
+makedepends=('python')
+sha256sums=('ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77')
+
+build() {
+  cd \${_name}-\${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  mkdir /tmp
+  chmod 777 /tmp
+
+  ./configure --prefix=/usr \\
+     --libdir='/usr/lib32' \\
+     --sysconfdir=/etc/samba \\
+     --localstatedir=/var \\
+     --bundled-libraries=NONE \\
+     --builtin-libraries=replace \\
+     --enable-talloc-compat1 \\
+     --disable-python
+
+  make
+}
+
+package() {
+  cd \${_name}-\${pkgver}
+  make DESTDIR="\${pkgdir}" install
+  rm -rf "\${pkgdir}"/usr/{include,share}
+}
+EOF
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
