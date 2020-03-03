@@ -139,16 +139,19 @@ mkdir "$WINE_WORKDIR"
 mkdir "$PKG_WORKDIR"
 
 #----------- AUR ----------------
-#Delete a nobody's password (make it empty):
-passwd -d nobody
+##Delete a nobody's password (make it empty):
+#passwd -d nobody
 
-# Allow the nobody passwordless sudo:
-printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
+## Allow the nobody passwordless sudo:
+#printf 'nobody ALL=(ALL) ALL\n' | tee -a /etc/sudoers
 
-# change workind dir to nobody own:
-chown nobody.nobody "$PKG_WORKDIR"
+## change workind dir to nobody own:
+#chown nobody.nobody "$PKG_WORKDIR"
 
-alias makepkg="sudo -u nobody makepkg"
+#alias makepkg="sudo -u nobody makepkg"
+
+# pacthing makepkg instead of using nobody user (root error will be on the EUID=987):
+sed -i 's/EUID == 0/EUID == 987/g' /usr/bin/makepkg
 #------------
 
 ## HAVE_SECURE_MKSTEMP workaround:
