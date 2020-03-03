@@ -150,12 +150,16 @@ mkdir "$PKG_WORKDIR"
 
 #alias makepkg="sudo -u nobody makepkg"
 
-# pacthing makepkg instead of using nobody user (root error will be on the EUID=987):
-sed -i 's/EUID == 0/EUID == 987/g' /usr/bin/makepkg
+# pacthing makepkg instead of using nobody user (root error will be on the EUID=9875):
+sed -i 's/EUID == 0/EUID == 9875/g' /usr/bin/makepkg
 #------------
 
-## HAVE_SECURE_MKSTEMP workaround:
-chmod 777 /tmp
+#FIXME: HAVE_SECURE_MKSTEMP on fakeroot
+#chmod 777 /tmp
+
+#TODO: need review:
+# https://aur.archlinux.org/packages/lib32-libwbclient/
+# https://aur.archlinux.org/packages/lib32-gst-libav/
 
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
@@ -167,6 +171,10 @@ git clone https://aur.archlinux.org/lib32-talloc.git
 cd lib32-talloc
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
+echo "=================="
+echo "DEBUG: cat /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log"
+cat /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log
+echo "=================="
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
 cd ..
