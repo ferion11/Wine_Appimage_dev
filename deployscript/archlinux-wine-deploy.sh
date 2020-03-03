@@ -251,35 +251,27 @@ rm -rf boot; rm -rf dev; rm -rf home; rm -rf mnt; rm -rf opt; rm -rf proc; rm -r
 rm -rf usr/src; rm -rf usr/share; rm usr/sbin; rm -rf usr/local; rm usr/lib/{*.a,*.o}
 #===========================================================================================
 
-## fix broken link libglx_indirect and others
-#rm usr/lib32/libGLX_indirect.so.0
-#ln -s libGLX_mesa.so.0 libGLX_indirect.so.0
-#mv -n libGLX_indirect.so.0 usr/lib32
-
-#rm usr/lib/libGLX_indirect.so.0
-#ln -s ../lib32/libGLX_mesa.so.0 libGLX_indirect.so.0
-#mv -n libGLX_indirect.so.0 usr/lib
+# fix broken link libglx_indirect and others
+rm usr/lib32/libGLX_indirect.so.0
+ln -s libGLX_mesa.so.0 libGLX_indirect.so.0
+mv -n libGLX_indirect.so.0 usr/lib32
 #--------
 
-#rm usr/lib32/libkeyutils.so
-#ln -s libkeyutils.so.1 libkeyutils.so
-#mv -n libkeyutils.so usr/lib32
-
-#rm usr/lib/libkeyutils.so
-#ln -s ../lib32/libkeyutils.so.1 libkeyutils.so
-#mv -n libkeyutils.so usr/lib
+rm usr/lib32/libkeyutils.so
+ln -s libkeyutils.so.1 libkeyutils.so
+mv -n libkeyutils.so usr/lib32
 #--------
 
 # workaround some of "wine --check-libs" wrong versions
-#ln -s libpcap.so libpcap.so.0.8
-#mv -n libpcap.so.0.8 usr/lib32
+ln -s libpcap.so libpcap.so.0.8
+mv -n libpcap.so.0.8 usr/lib32
 
-#ln -s libva.so libva.so.1
-#ln -s libva-drm.so libva-drm.so.1
-#ln -s libva-x11.so libva-x11.so.1
-#mv -n libva.so.1 usr/lib32
-#mv -n libva-drm.so.1 usr/lib32
-#mv -n libva-x11.so.1 usr/lib32
+ln -s libva.so libva.so.1
+ln -s libva-drm.so libva-drm.so.1
+ln -s libva-x11.so libva-x11.so.1
+mv -n libva.so.1 usr/lib32
+mv -n libva-drm.so.1 usr/lib32
+mv -n libva-x11.so.1 usr/lib32
 
 ## gst-libav link
 #ln -s ../../lib/gstreamer-1.0/libgstlibav.so libgstlibav.so
