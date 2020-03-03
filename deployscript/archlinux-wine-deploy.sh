@@ -172,7 +172,7 @@ mkdir lib32-talloc
 cd lib32-talloc
 #sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
 #sed -i '/sha256sums=/c sha256sums=("ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77")' ./PKGBUILD
-cat > "./pcsx2-git/PKGBUILD" << EOF
+cat > "./PKGBUILD" << EOF
 # Maintainer: Fabian Maurer <dark.shadow4@web.de>
 # Contributor: Rafael Fontenelle <rafaelff@gnome.org>
 # Contributor: Maxime Gauduin <alucryd@archlinux.org>
