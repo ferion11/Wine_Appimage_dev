@@ -128,11 +128,11 @@ pacman -Syy && pacman -S archlinuxcn-keyring
 
 pacman -Syy
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2
 
 ## extra for build
-EXTRASDEP="lib32-popt lib32-tdb lib32-acl lib32-bzip2 lib32-expat lib32-openssl lib32-xz lib32-zlib"
-pacman -S --noconfirm python lib32-ffmpeg tevent talloc libbsd ldb lib32-cmocka lzo libarchive libwbclient $EXTRASDEP
+EXTRASDEP="lib32-gst-plugins-base-libs"
+pacman -S --noconfirm gst-plugins-base-libs python python-dbg valgrind-multilib yasm $EXTRASDEP
 #===========================================================================================
 
 mkdir "$WINE_WORKDIR"
@@ -157,89 +157,9 @@ sed -i 's/EUID == 0/EUID == 9875/g' /usr/bin/makepkg
 #FIXME: HAVE_SECURE_MKSTEMP on fakeroot
 #chmod 777 /tmp
 
-#TODO: need review:
-# https://aur.archlinux.org/packages/lib32-libwbclient/
-# https://aur.archlinux.org/packages/lib32-gst-libav/
-
 # INFO: https://wiki.archlinux.org/index.php/Makepkg
 cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 
-#------------
-# getting some pkg now from https://gitlab.com/manjariando/manjariando-deps-x86_64/-/tree/master/public
-
-## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
-git clone https://aur.archlinux.org/lib32-talloc.git
-cd lib32-talloc
-#makepkg --syncdeps --noconfirm
-wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-talloc-2.3.1-1-x86_64.pkg.tar.zst || die "URL lib32-talloc erro!"
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
-cd ..
-#------------
-
-## lib32-tevent https://aur.archlinux.org/packages/lib32-tevent/
-git clone https://aur.archlinux.org/lib32-tevent.git
-cd lib32-tevent
-#sed -i '/pkgver=/c pkgver=0.10.2' ./PKGBUILD
-#sed -i '/sha256sums=/c sha256sums=("f8427822e5b2878fb8b28d6f50d96848734f3f3130612fb574fdd2d2148a6696")' ./PKGBUILD
-#makepkg --syncdeps --noconfirm
-wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-tevent-0.9.39-3-x86_64.pkg.tar.zst || die "URL lib32-tevent erro!"
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-tevent package"
-cd ..
-#------------
-
-## lib32-libbsd https://aur.archlinux.org/packages/lib32-libbsd/
-git clone https://aur.archlinux.org/lib32-libbsd.git
-cd lib32-libbsd
-#makepkg --syncdeps --noconfirm
-wget -nv -c https://gitlab.com/manjariando/manjariando-deps-x86_64/-/blob/master/public/lib32-libbsd-0.10.0-2-x86_64.pkg.tar.zst || die "URL lib32-libbsd erro!"
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libbsd package"
-cd ..
-#------------
-
-## lib32-ldb https://aur.archlinux.org/packages/lib32-ldb/
-git clone https://aur.archlinux.org/lib32-ldb.git
-cd lib32-ldb
-makepkg --syncdeps --noconfirm
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-ldb package"
-cd ..
-#------------
-
-## lib32-lzo https://aur.archlinux.org/packages/lib32-lzo/
-git clone https://aur.archlinux.org/lib32-lzo.git
-cd lib32-lzo
-makepkg --syncdeps --noconfirm
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-lzo package"
-cd ..
-#------------
-
-## lib32-libarchive https://aur.archlinux.org/packages/lib32-libarchive/
-git clone https://aur.archlinux.org/lib32-libarchive.git
-cd lib32-libarchive
-makepkg --syncdeps --noconfirm
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-libarchive package"
-cd ..
-#------------
-
-## lib32-libwbclient https://aur.archlinux.org/packages/lib32-libwbclient/
-git clone https://aur.archlinux.org/lib32-smbclient.git
-cd lib32-smbclient
-makepkg --syncdeps --noconfirm
-pacman --noconfirm -U ./*.pkg.tar*
-echo "* All files HERE: $(ls ./)"
-mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-smbclient package"
-cd ..
 #------------
 
 ## lib32-gst-libav https://aur.archlinux.org/packages/lib32-gst-libav/
@@ -307,6 +227,7 @@ echo "All files in ./cache: $(ls ./cache)"
 # Can't get from arch64_lib32_plus_user_repo: lib32-ffmpeg lib32-gst-libav lib32-libwbclient lib32-tevent lib32-talloc lib32-ldb lib32-libbsd lib32-avahi lib32-libarchive lib32-smbclient
 # removed smbclient and libwbclient smbclient (the .so file isn't loading on wine)
 #get_archlinux32_pkgs ./cache/ ffmpeg gst-libav tevent talloc ldb libbsd avahi libarchive libsoxr libssh vid.stab l-smash libtirpc
+get_archlinux32_pkgs ./cache/ tevent talloc ldb libbsd avahi libarchive libsoxr libssh vid.stab l-smash libtirpc
 
 # FIXME: "wine --check-libs" have:
 #libcapi20.so.3: missing (from isdn4k-utils trying now from aur)
