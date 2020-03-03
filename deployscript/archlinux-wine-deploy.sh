@@ -169,10 +169,7 @@ cd "$PKG_WORKDIR" || die "ERROR: Directory don't exist: $PKG_WORKDIR"
 ## lib32-talloc https://aur.archlinux.org/packages/lib32-talloc/
 #git clone https://aur.archlinux.org/lib32-talloc.git
 mkdir lib32-talloc
-cd lib32-talloc
-#sed -i '/pkgver=/c pkgver=2.3.1' ./PKGBUILD
-#sed -i '/sha256sums=/c sha256sums=("ef4822d2fdafd2be8e0cabc3ec3c806ae29b8268e932c5e9a4cd5585f37f9f77")' ./PKGBUILD
-cat > "./PKGBUILD" << EOF
+cat > "./lib32-talloc/PKGBUILD" << EOF
 # Maintainer: Fabian Maurer <dark.shadow4@web.de>
 # Contributor: Rafael Fontenelle <rafaelff@gnome.org>
 # Contributor: Maxime Gauduin <alucryd@archlinux.org>
@@ -198,7 +195,6 @@ build() {
   export CXX='g++ -m32'
   export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
-  mkdir /tmp
   chmod 777 /tmp
 
   ./configure --prefix=/usr \\
@@ -219,6 +215,7 @@ package() {
   rm -rf "\${pkgdir}"/usr/{include,share}
 }
 EOF
+cd lib32-talloc
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "* All files HERE: $(ls ./)"
