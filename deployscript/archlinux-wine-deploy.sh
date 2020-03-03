@@ -136,6 +136,9 @@ mkdir "$WINE_WORKDIR"
 mkdir "$PKG_WORKDIR"
 
 #----------- AUR ----------------
+# lib32-talloc HAVE_SECURE_MKSTEMP workaround:
+chmod 777 /tmp
+
 #Delete a nobody's password (make it empty):
 passwd -d nobody
 
