@@ -172,8 +172,8 @@ cd lib32-talloc
 makepkg --syncdeps --noconfirm
 pacman --noconfirm -U ./*.pkg.tar*
 echo "=================="
-echo "DEBUG: cat /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log"
-cat /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log
+echo "DEBUG: tail -70 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log"
+tail -70 /srv/wineappimage/pkg_work/lib32-talloc/src/talloc-2.3.0/bin/config.log
 echo "=================="
 echo "* All files HERE: $(ls ./)"
 mv *.pkg.tar* ../ || die "ERROR: Can't create the lib32-talloc package"
