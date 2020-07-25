@@ -107,21 +107,23 @@ echo "" >> /etc/pacman.conf
 
 # https://github.com/archlinuxcn/repo
 echo "[archlinuxcn]" >> /etc/pacman.conf
-echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
+#echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
+echo "SigLevel = Never" >> /etc/pacman.conf
 echo "Server = https://repo.archlinuxcn.org/\$arch" >> /etc/pacman.conf
 echo "" >> /etc/pacman.conf
 
-## https://lonewolf.pedrohlc.com/chaotic-aur/
-#echo "[chaotic-aur]" >> /etc/pacman.conf
+# https://lonewolf.pedrohlc.com/chaotic-aur/
+echo "[chaotic-aur]" >> /etc/pacman.conf
 #echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf
-#echo "Server = http://lonewolf-builder.duckdns.org/\$repo/x86_64" >> /etc/pacman.conf
-#echo "Server = http://chaotic.bangl.de/\$repo/x86_64" >> /etc/pacman.conf
-#echo "Server = https://repo.kitsuna.net/x86_64" >> /etc/pacman.conf
-#echo "" >> /etc/pacman.conf
-##pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
-##pacman-key --lsign-key 3056513887B78AEB
-##sudo pacman-key --keyserver hkp://p80.pool.sks-keyservers.net:80 -r 3056513887B78AEB
-##sudo pacman-key --lsign-key 3056513887B78AEB
+echo "SigLevel = Never" >> /etc/pacman.conf
+echo "Server = http://lonewolf-builder.duckdns.org/\$repo/x86_64" >> /etc/pacman.conf
+echo "Server = http://chaotic.bangl.de/\$repo/x86_64" >> /etc/pacman.conf
+echo "Server = https://repo.kitsuna.net/x86_64" >> /etc/pacman.conf
+echo "" >> /etc/pacman.conf
+#pacman-key --keyserver keys.mozilla.org -r 3056513887B78AEB
+#pacman-key --lsign-key 3056513887B78AEB
+#sudo pacman-key --keyserver hkp://p80.pool.sks-keyservers.net:80 -r 3056513887B78AEB
+#sudo pacman-key --lsign-key 3056513887B78AEB
 
 # workaround one bug: https://bugzilla.redhat.com/show_bug.cgi?id=1773148
 echo "Set disable_coredump false" >> /etc/sudo.conf
