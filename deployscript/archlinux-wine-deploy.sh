@@ -1,5 +1,5 @@
 #!/bin/bash
-P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous/wine-staging-5.11.tar.gz"
+P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.15.tar.gz"
 P_NAME="wine"
 P_MVERSION="staging-linux-x86"
 P_FILENAME="$(echo $P_URL | cut -d/ -f9)"

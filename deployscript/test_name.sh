@@ -2,7 +2,8 @@
 
 # If it's a Release Candidate, you will have to change P_VERSION to include the "-rc2" kind of string
 #P_URL="https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.11-staging-linux-x86.tar.gz"
-P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous/wine-staging-5.11.tar.gz"
+#P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous/wine-staging-5.11.tar.gz"
+P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.15.tar.gz"
 
 # wine
 P_NAME="wine"
