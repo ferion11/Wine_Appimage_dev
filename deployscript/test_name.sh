@@ -3,7 +3,8 @@
 # If it's a Release Candidate, you will have to change P_VERSION to include the "-rc2" kind of string
 #P_URL="https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.11-staging-linux-x86.tar.gz"
 #P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous/wine-staging-5.11.tar.gz"
-P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.15.tar.gz"
+#P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.15.tar.gz"
+P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/tkg-v5.11/wine-tkg-5.11.tar.gz"
 
 # wine
 P_NAME="wine"
@@ -15,7 +16,7 @@ P_MVERSION="staging-linux-x86"
 P_FILENAME="$(echo $P_URL | cut -d/ -f9)"
 
 # PlayOnLinux
-P_CSOURCE="f11"
+P_CSOURCE="tkg_f11"
 
 # 4.21
 TEMP="$(echo $P_FILENAME | cut -d- -f3)"
