@@ -10,76 +10,6 @@ PKG_WORKDIR="pkg_work"
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
-
- get_archlinux32_pkg() {
-	#WARNING: Only work on well formatted html
-	#usage:  get_archlinux32_pkg [link] [dest]
-	# get_archlinux32_pkg http://pool.mirror.archlinux32.org/pentium4/extra/aom-1.0.0.errata1-1.2-pentium4.pkg.tar.xz ./cache/
-	# get_archlinux32_pkg https://www.archlinux32.org/packages/pentium4/extra/xvidcore/ ./cache/
-	
-	REAL_LINK=""
-	PAR_PKG_LINK=$(echo $1 | grep "pkg.tar")
-	
-	if [ -n "$PAR_PKG_LINK" ]; then
-		REAL_LINK="$PAR_PKG_LINK"
-	else
-		rm -rf tmp_file_html
-		wget -nv -c $1 -O tmp_file_html
-		REAL_LINK=$(grep "pkg.tar" tmp_file_html | grep --invert-match ".sig" | sed -n 's/.*href="\([^"]*\).*/\1/p')
-		rm -rf tmp_file_html
-		
-		if [ -z "$REAL_LINK" ]; then
-			die "* ERROR get_archlinux32_pkg: Fail to download: $1"
-		fi
-	fi
-	
-	wget -nv -c $REAL_LINK -P $2
-}
-
-get_archlinux32_pkgs() {
-	#Usage: get_archlinux32_pkgs [dest] pack1 pack2...
-	#https://mirror.datacenter.by/pub/archlinux32/$arch/$repo/"
-	
-	rm -rf tmp_pentium4_core_html
-	rm -rf tmp_pentium4_extra_html
-	rm -rf tmp_pentium4_community_html
-	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/core/ -O tmp_pentium4_core_html
-	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/extra/ -O tmp_pentium4_extra_html
-	wget -nv -c https://mirror.datacenter.by/pub/archlinux32/pentium4/community/ -O tmp_pentium4_community_html
-	
-	for current_pkg in "${@:2}"
-	do
-		PKG_NAME_CORE=$(grep "$current_pkg-[0-9]" tmp_pentium4_core_html | grep --invert-match ".sig" | sed -n 's/.*href="\([^"]*\).*/\1/p' | grep "^$current_pkg")
-		
-		if [ -n "$PKG_NAME_CORE" ]; then
-			#echo "CORE: Downloading $current_pkg in $1 : $PKG_NAME_CORE"
-			#echo "http://pool.mirror.archlinux32.org/pentium4/core/$PKG_NAME_CORE"
-			get_archlinux32_pkg "http://pool.mirror.archlinux32.org/pentium4/core/$PKG_NAME_CORE" $1
-		else
-			PKG_NAME_EXTRA=$(grep "$current_pkg-[0-9]" tmp_pentium4_extra_html | grep --invert-match ".sig" | sed -n 's/.*href="\([^"]*\).*/\1/p' | grep "^$current_pkg")
-			
-			if [ -n "$PKG_NAME_EXTRA" ]; then
-				#echo "EXTRA: Downloading $current_pkg in $1 : $PKG_NAME_EXTRA"
-				#echo "http://pool.mirror.archlinux32.org/pentium4/extra/$PKG_NAME_EXTRA"
-				get_archlinux32_pkg "http://pool.mirror.archlinux32.org/pentium4/extra/$PKG_NAME_EXTRA" $1
-			else
-				PKG_NAME_COMMUNITY=$(grep "$current_pkg-[0-9]" tmp_pentium4_community_html | grep --invert-match ".sig" | sed -n 's/.*href="\([^"]*\).*/\1/p' | grep "^$current_pkg")
-				
-				if [ -n "$PKG_NAME_COMMUNITY" ]; then
-					#echo "COMMUNITY: Downloading $current_pkg in $1 : $PKG_NAME_COMMUNITY"
-					#echo "http://pool.mirror.archlinux32.org/pentium4/community/$PKG_NAME_COMMUNITY"
-					get_archlinux32_pkg "http://pool.mirror.archlinux32.org/pentium4/community/$PKG_NAME_COMMUNITY" $1
-				else
-					die "ERROR get_archlinux32_pkgs: Package don't found: $current_pkg"
-				fi
-			fi
-		fi
-	done
-	
-	rm -rf tmp_pentium4_core_html
-	rm -rf tmp_pentium4_extra_html
-	rm -rf tmp_pentium4_community_html
-}
 #=========================
 
 #Initializing the keyring requires entropy
@@ -221,13 +151,6 @@ rm -rf ./cache/lib32-nvidia-cg-toolkit*
 rm -rf ./cache/lib32-ocl-icd*
 rm -rf ./cache/lib32-opencl-mesa*
 echo "All files in ./cache: $(ls ./cache)"
-
-# Add the archlinux32 pentium4 libwbclient and deps:
-#ORIGINAL: get_archlinux32_pkgs ./cache/ gst-libav aom gsm lame libass libbluray dav1d libomxil-bellagio libsoxr libssh vid.stab l-smash x264 x265 xvidcore opencore-amr openjpeg2 libwbclient libtirpc tevent talloc ldb libbsd avahi libarchive smbclient
-# Can't get from arch64_lib32_plus_user_repo: lib32-gst-libav lib32-libwbclient lib32-tevent lib32-talloc lib32-ldb lib32-libbsd lib32-avahi lib32-libarchive lib32-smbclient
-# removed smbclient and libwbclient smbclient (the .so file isn't loading on wine)
-#get_archlinux32_pkgs ./cache/ gst-libav tevent talloc ldb libbsd avahi libarchive libsoxr libssh vid.stab l-smash libtirpc
-#get_archlinux32_pkgs ./cache/ tevent talloc ldb libbsd avahi libarchive libsoxr libssh vid.stab l-smash libtirpc
 
 # FIXME: "wine --check-libs" have:
 #libcapi20.so.3: missing (from isdn4k-utils trying now from aur)
