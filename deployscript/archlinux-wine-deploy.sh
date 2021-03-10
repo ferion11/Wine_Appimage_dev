@@ -138,7 +138,7 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git wget tar grep sed zstd xz bzip2
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git wget tar grep sed zstd xz bzip2 || die "ERROR: Some packages not found 111!!!"
 #===========================================================================================
 
 mkdir "$WINE_WORKDIR"
