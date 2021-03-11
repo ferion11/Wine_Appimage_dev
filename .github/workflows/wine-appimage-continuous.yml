@@ -37,8 +37,8 @@ jobs:
     - name: Continuous build
       uses: marvinpinto/action-automatic-releases@latest
       with:
-        title: Continuous build (${{ env.RELEASE_VERSION }})
-        automatic_release_tag: "continuous-${{ env.RELEASE_VERSION }}"
+        title: Continuous build (master)
+        automatic_release_tag: "continuous-master"
         prerelease: true
         draft: false
         files: ./result/*
