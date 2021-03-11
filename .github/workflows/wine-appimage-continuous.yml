@@ -40,7 +40,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: continuous-${BRANCH_NAME}
-        release_name: Continuous build (${BRANCH_NAME})
+        tag_name: continuous-${{BRANCH_NAME}}
+        release_name: Continuous build (${{BRANCH_NAME}})
         draft: false
         prerelease: true
