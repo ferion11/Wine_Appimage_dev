@@ -28,16 +28,8 @@ jobs:
         wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
         bash md5sum_util.sh result
 
-    - name: Echo variable
+    - name: Echo github.ref
       run: echo ${{ github.ref }}
 
-    - name: Extract tag name
-      id: tag
-      uses: actions/github-script@0.2.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          return context.payload.ref.replace(/\/refs\/tags\//, '');
-
-    - name: Echo variable 2
-      run: echo ${{ steps.tag.outputs.result }}
+    - name: Echo github.event.release.tag_name
+      run: echo ${{ github.event.release.tag_name }}
