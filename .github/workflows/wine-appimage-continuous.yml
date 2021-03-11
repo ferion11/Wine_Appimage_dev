@@ -40,3 +40,6 @@ jobs:
         tag: continuous-master
         publish: true
         prerelease: true
+      template: |
+        ## What’s Changed
+        $CHANGES
