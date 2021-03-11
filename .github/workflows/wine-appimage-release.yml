@@ -1,0 +1,40 @@
+name: wine-appimage-release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: Run deploy.sh
+      shell: bash
+      run: bash ./deploy.sh
+
+    - name: Run md5sum
+      shell: bash
+      run: |
+        mkdir result
+        mv ./*AppImage* ./result/
+        wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
+        bash md5sum_util.sh result
+
+    # set RELEASE_VERSION to tag or to something like master (from /refs/tags/v1.0.1 or /refs/heads/master)
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
+
+    - name: Release upload
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        title: Release build (${{ env.RELEASE_VERSION }})
+        automatic_release_tag: ${{ env.RELEASE_VERSION }}
+        prerelease: false
+        draft: false
+        files: ./result/*
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
