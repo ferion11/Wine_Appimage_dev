@@ -43,4 +43,4 @@ jobs:
         tag_name: continuous-${{env.BRANCH_NAME}}
         release_name: Continuous build (${{env.BRANCH_NAME}})
         draft: false
-        prerelease: true
+        prerelease: false
