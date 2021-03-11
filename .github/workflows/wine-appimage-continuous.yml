@@ -30,10 +30,6 @@ jobs:
         wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
         bash md5sum_util.sh result
 
-    # set RELEASE_VERSION to tag or to something like master (from /refs/tags/v1.0.1 or /refs/heads/master)
-    - name: Set env
-      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
-
     - name: Continuous build
       uses: marvinpinto/action-automatic-releases@latest
       with:
