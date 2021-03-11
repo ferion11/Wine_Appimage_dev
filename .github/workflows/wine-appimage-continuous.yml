@@ -31,5 +31,5 @@ jobs:
     - name: Echo github.ref
       run: echo ${{ github.ref }}
 
-    - name: Echo github.event.release.tag_name
-      run: echo ${{ github.event.release.tag_name }}
+    - name: Echo github.ref 2
+      run: echo ${{ github.ref##*/ }}
