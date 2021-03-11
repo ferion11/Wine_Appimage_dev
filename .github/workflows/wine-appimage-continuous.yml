@@ -31,15 +31,13 @@ jobs:
     - name: Echo variable
       run: echo ${{ github.ref }}
 
-    - name: Release Drafter
-      uses: release-drafter/release-drafter@v5.12.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Extract tag name
+      id: tag
+      uses: actions/github-script@0.2.0
       with:
-        name: Continuous build (master)
-        tag: continuous-master
-        publish: true
-        prerelease: true
-      template: |
-        ## What’s Changed
-        $CHANGES
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          return context.payload.ref.replace(/\/refs\/tags\//, '');
+
+    - name: Echo variable 2
+      run: echo ${{ steps.tag.outputs.result }}
