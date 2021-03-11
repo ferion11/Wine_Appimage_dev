@@ -25,13 +25,19 @@ jobs:
         wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
         bash md5sum_util.sh result
 
+    - name: set BRANCH_NAME
+      run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+    - name: Echo BRANCH_NAME
+      run: echo ${BRANCH_NAME}
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${BRANCH_NAME}
+        release_name: Release build (${BRANCH_NAME})
         draft: false
         prerelease: false
