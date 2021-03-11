@@ -28,7 +28,7 @@ jobs:
         wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
         bash md5sum_util.sh result
 
-    - name: Echo variable:
+    - name: Echo variable
       run: echo ${{ github.ref }}
 
     - name: Release Drafter
