@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - 'master'
-      - 'last'
   pull_request:
     branches:
       - 'master'
-      - 'last'
 
 jobs:
   build:
@@ -30,12 +28,23 @@ jobs:
         wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
         bash md5sum_util.sh result
 
-    - name: Continuous build
-      uses: marvinpinto/action-automatic-releases@latest
+    - name: Create Release master
+      id: create_release_master
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        title: Continuous build (master)
-        automatic_release_tag: "continuous-master"
-        prerelease: true
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
         draft: false
-        files: ./result/*
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        prerelease: true
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release_master.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./result/*
+#        asset_name: my-artifact.zip
+#        asset_content_type: application/zip
