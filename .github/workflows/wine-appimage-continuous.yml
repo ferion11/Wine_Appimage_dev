@@ -34,13 +34,12 @@ jobs:
     - name: Echo BRANCH_NAME
       run: echo ${BRANCH_NAME}
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Continuous build
+      uses: marvinpinto/action-automatic-releases@latest
       with:
-        tag_name: continuous-${{env.BRANCH_NAME}}
-        release_name: Continuous build (${{env.BRANCH_NAME}})
+        title: Continuous build (${{ env.BRANCH_NAME }})
+        automatic_release_tag: "continuous-${{ env.BRANCH_NAME }}"
+        prerelease: true
         draft: false
-        prerelease: false
+        files: ./result/*
+        repo_token: ${{ secrets.BRANCH_NAME }}
