@@ -123,10 +123,9 @@ cd ..
 wget -nv -c "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O  appimagetool.AppImage
 chmod +x appimagetool.AppImage
 
-chmod +x AppRun
+cp resource/* ${WINE_WORKDIR}
 
-cp AppRun $WINE_WORKDIR
-cp resource/* $WINE_WORKDIR
+chmod +x ${WINE_WORKDIR}/AppRun
 #-----------------------------
 
 ##test for others AppImage variations (have to change .travis.yml too):
