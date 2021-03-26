@@ -32,12 +32,23 @@ echo "RESULT: ${P_NAME}-${P_MVERSION}-v${P_VERSION}-${P_CSOURCE}-x86_64.AppImage
 die() { echo >&2 "$*"; exit 1; };
 #=========================
 
-# Pre install
-sudo dpkg --add-architecture i386
-sudo apt update
+export UBUNTU_DISTRO="bionic"
+export UBUNTU_MIRROR="http://archive.ubuntu.com/ubuntu/"
+
+# add deps for wine:
+sudo dpkg --add-architecture i386 >/dev/null
+sudo add-apt-repository -y ppa:cybermax-dexter/sdl2-backport >/dev/null || die "* add-apt-repository fail!"
+
+# updating wine https://wiki.winehq.org/Ubuntu:
+wget -q https://dl.winehq.org/wine-builds/winehq.key >/dev/null || die "* wget winehq.key fail!"
+sudo apt-key add <./winehq.key || die "* apt-key fail!"
+sudo add-apt-repository "deb https://dl.winehq.org/wine-builds/ubuntu/ ${UBUNTU_DISTRO} main" >/dev/null
+sudo apt-get -q -y update >/dev/null
+#-----------------------------------
+
 sudo apt install -y aptitude wget file bzip2 patchelf || die "ERROR: Some packages not found! to run the script!!!"
 #===========================================================================================
-#-----------------------------------
+
 
 # Get Wine
 wget -nv -c $P_URL
@@ -51,9 +62,9 @@ cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 pkgcachedir='/tmp/.pkgcachedir'
 mkdir -p "${pkgcachedir}"
 
-aptitude -y -d -o dir::cache::archives="${pkgcachedir}" install libwine:i386 libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
+aptitude -y -d -o dir::cache::archives="${pkgcachedir}" install wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
 
-find $pkgcachedir -name '*deb' ! -name 'libwine*' -exec dpkg -x {} . \;
+find $pkgcachedir -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
 
 rm -rf $pkgcachedir
 
