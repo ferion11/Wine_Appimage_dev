@@ -35,7 +35,7 @@ jobs:
       run: echo ${BRANCH_NAME}
 
     - name: Continuous build
-      uses: marvinpinto/action-automatic-releases@v1.1.1
+      uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         title: Continuous build (${{ env.BRANCH_NAME }})
