@@ -7,7 +7,9 @@ P_CSOURCE="f11"
 TEMP="$(echo $P_FILENAME | cut -d- -f3)"
 P_VERSION="${TEMP%???????}"
 WINE_WORKDIR="wineversion"
-PKG_WORKDIR="pkg_work"
+PKG_WORKDIR='/tmp/.pkgcachedir'
+mkdir -p "$WINE_WORKDIR"
+mkdir -p "${PKG_WORKDIR}"
 
 echo "P_URL: ${P_URL}"
 echo "P_NAME: ${P_NAME}"
@@ -49,24 +51,19 @@ sudo apt-get -q -y update >/dev/null
 sudo apt install -y aptitude wget file bzip2 patchelf || die "ERROR: Some packages not found! to run the script!!!"
 #===========================================================================================
 
-
 # Get Wine
-wget -nv -c $P_URL
+wget -nv -c "${P_URL}"
 tar xf $P_FILENAME -C "$WINE_WORKDIR"/
 
 #===========================================================================================
 
 cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 
+aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
 
-pkgcachedir='/tmp/.pkgcachedir'
-mkdir -p "${pkgcachedir}"
+find "${PKG_WORKDIR}" -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
 
-aptitude -y -d -o dir::cache::archives="${pkgcachedir}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
-
-find $pkgcachedir -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
-
-rm -rf $pkgcachedir
+rm -rf "${PKG_WORKDIR}"
 
 #----------------------------------------------
 
