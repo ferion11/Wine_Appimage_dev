@@ -62,7 +62,7 @@ cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 pkgcachedir='/tmp/.pkgcachedir'
 mkdir -p "${pkgcachedir}"
 
-aptitude -y -d -o dir::cache::archives="${pkgcachedir}" install wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
+aptitude -y -d -o dir::cache::archives="${pkgcachedir}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
 
 find $pkgcachedir -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
 
