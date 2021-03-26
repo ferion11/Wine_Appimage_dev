@@ -143,3 +143,4 @@ export ARCH=x86_64; squashfs-root/AppRun -v $WINE_WORKDIR -u 'gh-releases-zsync|
 
 
 rm -rf appimagetool.AppImage
+
