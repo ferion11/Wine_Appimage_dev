@@ -61,9 +61,11 @@ cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 
 sudo aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386 || die "* aptitude fail!"
 
+sudo chmod 777 "${PKG_WORKDIR}" -R
+
 find "${PKG_WORKDIR}" -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
 
-sudo rm -rf "${PKG_WORKDIR}"
+rm -rf "${PKG_WORKDIR}"
 
 #----------------------------------------------
 
