@@ -1,4 +1,5 @@
 #!/bin/bash
+FIXED_LINK_PATH="/tmp/.ff11_fixed_appimage_ubuntu_bionic_path_v0001"
 P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
 P_NAME="wine"
 P_MVERSION="staging-linux-x86"
@@ -109,8 +110,29 @@ sed -i 's/winemenubuilder.exe -a -r/winemenubuilder.exe -r/g' share/wine/wine.in
 sed -i 's|    LicenseInformation|    LicenseInformation,\\\n    FileOpenAssociations|g;$a \\n[FileOpenAssociations]\nHKCU,Software\\Wine\\FileOpenAssociations,"Enable",,"N"' share/wine/wine.inf
 #===========================================================================================
 
-# find and patching the x86 executables with glibc
-#TODO!!!!
+# find and patching the x86 executables with glibc on bin
+# ./bin
+for file_i in $(find ./bin -type f -perm -u+x 2>&1); do
+	IS_X86_EXEC="$(file ${file_i} 2>&1 | grep ld-linux.so.2)"
+
+	if [ -n "${IS_X86_EXEC}" ]; then
+		echo "======="
+		echo "patch: ${file_i}"
+		patchelf --set-interpreter ${FIXED_LINK_PATH}/lib/ld-linux.so.2 --set-rpath ${FIXED_LINK_PATH}/lib ${file_i}
+		echo "======="
+	fi
+done
+# and usr/bin:
+for file_i in $(find ./usr/bin -type f -perm -u+x 2>&1); do
+	IS_X86_EXEC="$(file ${file_i} 2>&1 | grep ld-linux.so.2)"
+
+	if [ -n "${IS_X86_EXEC}" ]; then
+		echo "======="
+		echo "patch: ${file_i}"
+		patchelf --set-interpreter ${FIXED_LINK_PATH}/lib/ld-linux.so.2 --set-rpath ${FIXED_LINK_PATH}/lib ${file_i}
+		echo "======="
+	fi
+done
 
 #===========================================================================================
 
