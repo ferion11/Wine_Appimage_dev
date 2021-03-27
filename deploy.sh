@@ -59,7 +59,7 @@ tar xf $P_FILENAME -C "$WINE_WORKDIR"/
 
 cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 
-aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386
+aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386 || die "* aptitude fail!"
 
 find "${PKG_WORKDIR}" -name '*deb' ! -name 'wine*' -exec dpkg -x {} . \;
 
