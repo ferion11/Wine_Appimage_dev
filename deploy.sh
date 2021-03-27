@@ -97,7 +97,6 @@ rm -rf etc; rm -rf sbin; rm -rf var;
 #mv -n libva.so.1 usr/lib32
 #mv -n libva-drm.so.1 usr/lib32
 #mv -n libva-x11.so.1 usr/lib32
-
 #===========================================================================================
 
 ## Disable PulseAudio
@@ -108,6 +107,11 @@ sed -i 's/winemenubuilder.exe -a -r/winemenubuilder.exe -r/g' share/wine/wine.in
 
 # Disable FileOpenAssociations
 sed -i 's|    LicenseInformation|    LicenseInformation,\\\n    FileOpenAssociations|g;$a \\n[FileOpenAssociations]\nHKCU,Software\\Wine\\FileOpenAssociations,"Enable",,"N"' share/wine/wine.inf
+#===========================================================================================
+
+# find and patching the x86 executables with glibc
+#TODO!!!!
+
 #===========================================================================================
 
 # appimage
