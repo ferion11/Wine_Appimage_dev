@@ -50,6 +50,10 @@ export LD_LIBRARY_PATH="${BASE_X86_LIB_PATH}:${LD_LIBRARY_PATH}"
 export LD_LIBRARY_PATH="${HERE}/lib:${LD_LIBRARY_PATH}"
 
 export PATH="${HERE}/bin:${HERE}/usr/bin:${PATH}"
+
+ubuntu extra:
+export LD_LIBRARY_PATH="${HERE}/lib/i386-linux-gnu:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${HERE}/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
 #----------------------------------------
 
 #Sound Library
