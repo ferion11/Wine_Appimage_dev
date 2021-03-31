@@ -1,6 +1,7 @@
 #!/bin/bash
 FIXED_LINK_PATH="/tmp/.ff11_fixed_appimage_ubuntu_bionic_path_v0001"
-P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
+#P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
+P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.18.tar.gz"
 P_NAME="wine"
 P_MVERSION="staging-linux-x86"
 P_FILENAME="$(echo ${P_URL} | cut -d/ -f9)"
@@ -9,8 +10,6 @@ TEMP="$(echo $P_FILENAME | cut -d- -f3)"
 P_VERSION="${TEMP%???????}"
 WINE_WORKDIR="wineversion"
 PKG_WORKDIR='/tmp/.pkgcachedir'
-mkdir -p "$WINE_WORKDIR"
-mkdir -p "${PKG_WORKDIR}"
 
 echo "P_URL: ${P_URL}"
 echo "P_NAME: ${P_NAME}"
@@ -51,6 +50,8 @@ sudo apt-get -q -y update >/dev/null
 
 sudo apt install -y aptitude wget file bzip2 patchelf || die "ERROR: Some packages not found! to run the script!!!"
 #===========================================================================================
+mkdir -p "$WINE_WORKDIR"
+mkdir -p "${PKG_WORKDIR}"
 
 # Get Wine
 wget -nv -c "${P_URL}"
