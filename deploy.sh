@@ -61,7 +61,8 @@ tar xf $P_FILENAME -C "$WINE_WORKDIR"/
 
 cd "$WINE_WORKDIR" || die "ERROR: Directory don't exist: $WINE_WORKDIR"
 
-sudo aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386 || die "* aptitude fail!"
+sudo aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" install winehq-staging wine-staging wine-staging-amd64 wine-staging-i386 winbind cabextract libva2:i386 libva-drm2:i386 libva-x11-2:i386 libvulkan1:i386 || die "* aptitude cache install fail!"
+sudo aptitude -y -d -o dir::cache::archives="${PKG_WORKDIR}" reinstall libjpeg-turbo8 || die "* aptitude cache reinstall fail!"
 
 sudo chmod 777 "${PKG_WORKDIR}" -R
 
