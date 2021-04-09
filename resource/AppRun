@@ -1,5 +1,5 @@
 #!/bin/bash -e
-FIXED_GLIBC_COPY="/tmp/.ff11_fixed_appimage_ubuntu_bionic_glibc_v0001"
+FIXED_LINK_PATH="/tmp/.ff11_fixed_appimage_ubuntu_bionic_path_v0001"
 HERE="$(dirname "$(readlink -f "${0}")")"
 BASE_X86_LIB_PATH="${HERE}/usr/lib/i386-linux-gnu"
 BASE_X64_LIB_PATH="${HERE}/usr/lib/x86_64-linux-gnu"
@@ -7,9 +7,9 @@ F11_APPIMAGE_TMP_DIR="${HERE}_tmp"
 F11_APPIMAGE_CONF_DIR="${HOME}/.config/f11conf"
 F11_APPIMAGE_VKCONF="${F11_APPIMAGE_CONF_DIR}/vulkan.conf"
 
-# just for glibc (remove old and copy new):
-rm -rf "${FIXED_GLIBC_COPY}"
-cp "${HERE}/lib/i386-linux-gnu/ld-2.27.so" "${FIXED_GLIBC_COPY}"
+# just for glibc:
+rm -rf "${FIXED_LINK_PATH}"
+ln -s "${HERE}" "${FIXED_LINK_PATH}"
 #===================================================================
 
 make_dir() { [ ! -d "${1}" ] && mkdir -p "${1}"; };
