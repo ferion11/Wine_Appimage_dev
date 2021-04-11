@@ -1,7 +1,7 @@
 #!/bin/bash
 FIXED_LINK_PATH="/tmp/.ff11_fixed_appimage_ubuntu_bionic_path_v0001"
-#P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
-P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.18.tar.gz"
+P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
+#P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.18.tar.gz"
 P_NAME="wine"
 P_MVERSION="staging-linux-x86"
 P_FILENAME="$(echo ${P_URL} | cut -d/ -f9)"
