@@ -1,5 +1,5 @@
 #!/bin/bash
-FIXED_LINK_PATH="/tmp/.ff11_fixed_appimage_ubuntu_bionic_path_v0001"
+FIXED_GLIBC_COPY="/tmp/.ff11_fixed_appimage_ubuntu_bionic_glibc_v0001"
 #P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/v5.11/wine-staging-5.11.tar.gz"
 #P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-last/wine-staging-5.18.tar.gz"
 P_URL="https://github.com/ferion11/f11_wine_builder/releases/download/continuous-master/wine-staging-6.5.tar.gz"
@@ -121,7 +121,7 @@ for file_i in $(find ./bin -type f -perm -u+x 2>&1); do
 	if [ -n "${IS_X86_EXEC}" ]; then
 		echo "======="
 		echo "patch: ${file_i}"
-		patchelf --set-interpreter ${FIXED_LINK_PATH}/lib/ld-linux.so.2 --set-rpath ${FIXED_LINK_PATH}/lib ${file_i}
+		patchelf --set-interpreter ${FIXED_GLIBC_COPY}/ld-linux.so.2 --set-rpath ${FIXED_GLIBC_COPY} ${file_i}
 		echo "======="
 	fi
 done
@@ -132,7 +132,7 @@ for file_i in $(find ./usr/bin -type f -perm -u+x 2>&1); do
 	if [ -n "${IS_X86_EXEC}" ]; then
 		echo "======="
 		echo "patch: ${file_i}"
-		patchelf --set-interpreter ${FIXED_LINK_PATH}/lib/ld-linux.so.2 --set-rpath ${FIXED_LINK_PATH}/lib ${file_i}
+		patchelf --set-interpreter ${FIXED_GLIBC_COPY}/ld-linux.so.2 --set-rpath ${FIXED_GLIBC_COPY} ${file_i}
 		echo "======="
 	fi
 done
